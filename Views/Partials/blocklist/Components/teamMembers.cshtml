@@ -1,0 +1,83 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using System.Linq
+@using Umbraco.Extensions
+@using Umbraco.Cms.Core.Models
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+ 
+ @* Base done by med but i got help from ChatGpt 5 on the logic of 3 cards and 4 cards on each row *@
+
+@{
+    var c = (ContentModels.TeamMembers)Model.Content;
+
+    var cards = Enumerable.Range(1, 7).Select(i => new {
+        Img   = c.Value<IPublishedContent>($"card{i}Image"),
+        Name  = c.Value<string>($"card{i}Name"),
+        Title = c.Value<string>($"card{i}Title")
+    })
+    .Where(x => x.Img != null || !string.IsNullOrWhiteSpace(x.Name) || !string.IsNullOrWhiteSpace(x.Title))
+    .Take(7)
+    .ToList();
+
+    var firstRow  = cards.Take(3).ToList();
+    var secondRow = cards.Skip(3).Take(4).ToList();
+}
+
+<section class="team-grid">
+  <div class="tg-container">
+    <header class="tg-header">
+      @if (!string.IsNullOrWhiteSpace(c.SmallTitle)) 
+      {
+         <span class="tg-eyebrow">@c.SmallTitle</span> 
+      }
+
+      @if (!string.IsNullOrWhiteSpace(c.Heading))    
+      { 
+        <h2 class="tg-title">@c.Heading</h2> 
+      }
+    </header>
+
+    @if (firstRow.Any())
+    {
+      <div class="tg-grid tg-grid-3">
+        @foreach (var m in firstRow)
+        {
+          <article class="tg-card">
+            @if (m.Img != null) { <img class="tg-photo" src="@m.Img.Url()" alt="@(m.Name ?? "Team member")" loading="lazy" /> }
+            <div class="tg-meta">
+              @if (!string.IsNullOrWhiteSpace(m.Name))  
+              { 
+                <h3 class="tg-name">@m.Name</h3> 
+              }
+              @if (!string.IsNullOrWhiteSpace(m.Title)) 
+              { 
+                <p class="tg-role">@m.Title</p> 
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+
+    @if (secondRow.Any())
+    {
+      <div class="tg-grid tg-grid-4">
+        @foreach (var m in secondRow)
+        {
+          <article class="tg-card">
+            @if (m.Img != null) { <img class="tg-photo" src="@m.Img.Url()" alt="@(m.Name ?? "Team member")" loading="lazy" /> }
+            <div class="tg-meta">
+              @if (!string.IsNullOrWhiteSpace(m.Name))  
+              { 
+                <h3 class="tg-name">@m.Name</h3>
+              }
+              @if (!string.IsNullOrWhiteSpace(m.Title)) 
+              { 
+                <p class="tg-role">@m.Title</p> 
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>

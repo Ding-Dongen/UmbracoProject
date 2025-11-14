@@ -1,0 +1,73 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using System
+@using System.Linq
+@using Umbraco.Extensions
+@using Umbraco.Cms.Core.Models
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+ @* Read about source in aboutInfo *@
+ 
+@{
+    var c = (ContentModels.BigNames)Model.Content;
+
+    var smallTitle  = c.Value<string>("smallTitle");
+    var heading     = c.Value<string>("heading");
+    var bodyText    = c.Value<string>("bodyText");
+    var stars       = Math.Clamp(c.Value<int?>("stars") ?? 5, 0, 5);
+    var personName  = c.Value<string>("personName");
+    var companyName = c.Value<string>("companyName");
+    var sideImage   = c.Value<IPublishedContent>("sideImage");
+}
+
+<section class="big-names-hero">
+  <div class="bnh-grid">
+    <div class="bnh-left">
+      @if (!string.IsNullOrWhiteSpace(smallTitle))
+      {
+        <span class="bnh-eyebrow">@smallTitle</span>
+      }
+
+      @if (!string.IsNullOrWhiteSpace(heading))
+      {
+        <h2 class="bnh-title">@heading</h2>
+      }
+
+      @if (!string.IsNullOrWhiteSpace(bodyText))
+      {
+        <p class="bnh-body">@Html.Raw(bodyText)</p>
+      }
+
+      <div class="bnh-rating" aria-label="@($"{stars} out of 5 stars")">
+        @for (var i = 1; i <= 5; i++)
+        {
+            if (i <= stars)
+            {
+                <i class="fa-solid fa-star"></i>
+            }
+            else
+            {
+                <i class="fa-regular fa-star"></i>
+            }
+        }
+      </div>
+
+      <div class="bnh-person">
+        @if (!string.IsNullOrWhiteSpace(personName))
+        {
+          <strong class="bnh-name">@personName</strong><br />
+        }
+        @if (!string.IsNullOrWhiteSpace(companyName))
+        {
+          <span class="bnh-company">@companyName</span>
+        }
+      </div>
+    </div>
+
+    <div class="bnh-right">
+      @if (sideImage != null)
+      {
+        <img src="@sideImage.Url()" alt="" class="bnh-image" loading="lazy" />
+      }
+    </div>
+  </div>
+</section>

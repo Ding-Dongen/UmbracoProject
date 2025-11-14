@@ -1,0 +1,50 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Extensions
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "mainLayout.cshtml";
+
+	var teamSection = Model.Value<BlockListModel>("sectionTeamMembers");
+
+	var bigNames = Model.Value<BlockListModel>("sectionBigNames");
+
+	var testamonial = Model.Value<BlockListModel>("sectionTestamonial");
+
+	var siteSettings = Umbraco.ContentAtRoot()
+        .SelectMany(x => x.DescendantsOrSelf()) 
+        .FirstOrDefault(x => x.ContentType.Alias == "siteSettings");
+
+    var contactHeroBlocks = siteSettings?.Value<BlockListModel>("globalContactHero");
+}
+
+<partial name="Partials/Layout/_PageBanner" model="(IBanner)Model" />
+
+<section>
+	<div>
+    @if (testamonial?.Any() == true)
+{
+    @await Html.GetBlockListHtmlAsync(testamonial)
+}
+  </div>
+	<div>
+    @if (bigNames?.Any() == true)
+{
+    @await Html.GetBlockListHtmlAsync(bigNames)
+}
+  </div>
+	 <div>
+
+@if (teamSection?.Any() == true)
+{
+    @await Html.GetBlockListHtmlAsync(teamSection)
+}
+
+  </div>
+	<div>
+    @if (contactHeroBlocks?.Any() == true)
+{
+    @await Html.GetBlockListHtmlAsync(contactHeroBlocks)
+}
+  </div>
+</section>

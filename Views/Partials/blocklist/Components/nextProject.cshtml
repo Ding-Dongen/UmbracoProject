@@ -1,0 +1,50 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var c = (ContentModels.NextProject)Model.Content;
+    
+    var bg = c.BgImage;
+    var eyebrow = c.Eyebrow;
+    var heading = c.Heading;
+    var intro = c.Intro;
+    var btnText = !string.IsNullOrWhiteSpace(c.ButtonText) ? c.ButtonText : "Submit";
+    var bgStyle = bg != null ? $"background-image: url('{bg.Url()}');" : "";
+}
+
+<section class="rcb" style="@bgStyle">
+  <div class="rcb-overlay"></div>
+
+  <div class="rcb-card">
+    @if (!string.IsNullOrWhiteSpace(eyebrow))
+    {
+        <div class="rcb-eyebrow">@eyebrow</div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(heading))
+    {
+        <h2 class="rcb-heading">@heading</h2>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(intro))
+    {
+        <p class="rcb-intro">@Html.Raw(intro)</p>
+    }
+
+    <form class="rcb-form" action="#" method="post" novalidate>
+      <div class="rcb-grid">
+        <input class="rcb-input" type="text" name="name" placeholder="Name" />
+        <input class="rcb-input" type="tel" name="phone" placeholder="Phone" />
+        <input class="rcb-input" type="email" name="email" placeholder="Email address" />
+        <select class="rcb-select" name="service">
+          <option>Financial consulting</option>
+          <option>Tax & Audits</option>
+          <option>Risk Management</option>
+          <option>Investments</option>
+        </select>
+      </div>
+
+      <button type="submit" class="rcb-submit">@btnText</button>
+    </form>
+  </div>
+</section>

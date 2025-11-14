@@ -1,0 +1,32 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models;
+
+@{
+    var c = (ContentModels.Brands)Model.Content;
+
+    var brandOne   = c.BrandOne;
+    var brandTwo   = c.BrandTwo;
+    var brandThree = c.BrandThree;
+    var brandFour  = c.BrandFour;
+    var brandFive = c.BrandFive;
+    var brandSix  = c.BrandSix;
+
+    var logos = new[] { brandOne, brandTwo, brandThree, brandFour, brandFive, brandSix }
+                .Where(x => x != null)
+                .ToList();
+}
+
+@if (logos.Any())
+{
+    <section class="logo-strip">
+        <div class="ls-inner">
+            @foreach (var img in logos)
+            {
+                <div class="ls-item">
+                    <img src="@img!.Url()" alt="@img!.Name" loading="lazy" />
+                </div>
+            }
+        </div>
+    </section>
+}

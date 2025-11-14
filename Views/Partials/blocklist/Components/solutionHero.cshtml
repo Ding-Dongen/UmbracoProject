@@ -1,0 +1,75 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+ @* Read about source in aboutInfo
+    Followed Emil Vettainens video about fetching from site settings and sligtly modified by me *@
+
+@{
+    var content  = (ContentModels.SolutionHero)Model.Content;
+    var settings = Model.Settings as ContentModels.SolutionHeroSettings;
+
+    var pickedColor = settings?.BackgroundColor?.Color ?? "#f8f8f8";
+
+    var showSmallTitle = settings?.Toggle 
+                         ?? (Model.Settings?.Value<bool>("showSmallTitle") ?? false);
+
+    var current = Umbraco.AssignedContentItem;
+    var root = current.Root();
+
+    var service  = root.Children<ContentModels.Service>()?.FirstOrDefault();
+
+    var subpages = service?
+        .Children<ContentModels.ServiceSubPage>()?
+        .OrderBy(x => x.CreateDate)
+        .ToList()
+        ?? new List<ContentModels.ServiceSubPage>();
+}
+
+<section class="solution-hero" style="background-color:@pickedColor">
+  <div class="sh-container">
+
+    <div class="sh-header">
+        @if (showSmallTitle && !string.IsNullOrWhiteSpace(content.SmallTitle))
+        {
+            <span class="sh-smalltitle">@content.SmallTitle</span>
+        }
+       
+          <h2 class="sh-main-header">@content.Heading</h2>
+        
+    </div>
+
+    @if (subpages.Any())
+    {
+      <div class="sh-grid">
+        @foreach (var sp in subpages)
+        {
+          <article class="sh-card">
+            <a class="sh-links" href="@sp.Url()">
+              <div class="sh-card-body">
+
+                @* Titel: om din model har ett Title-fält *@
+                @* Om inte: använd sp.Name eller sp.Value<string>("title") *@
+                @if (!string.IsNullOrWhiteSpace(sp.Name))
+                {
+                  <h3>@sp.Name</h3>
+                }
+
+                @if (sp.PageImage != null)
+                {
+                  <img src="@sp.PageImage.Url()" alt="@(sp.Name ?? sp.Name)" />
+                }
+
+                @* Text *@
+                @if (!string.IsNullOrWhiteSpace(sp.SubPageText))
+                {
+                  <p>@sp.SubPageText</p>
+                }
+
+              </div>
+            </a>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>

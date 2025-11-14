@@ -1,0 +1,41 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models
+
+@{
+    var c = (ContentModels.TrustedHero)Model.Content;
+
+    var link = c.ButtonLink?.FirstOrDefault();
+}
+
+<section class="trusted-hero">
+  <div class="th-container">
+    <div class="th-top">
+      @if (!string.IsNullOrWhiteSpace(c.MainTitle) || !string.IsNullOrWhiteSpace(c.HighlightText))
+      {
+        <h2>
+          @c.MainTitle
+        </h2>
+          @if (!string.IsNullOrWhiteSpace(c.HighlightText))
+          { 
+            <span class="th-highlight-text">@c.HighlightText</span> 
+          }
+      }
+
+      @if (!string.IsNullOrWhiteSpace(c.Description))
+      {
+        <p class="th-desc">@c.Description</p>
+      }
+
+      @if (link != null && !string.IsNullOrWhiteSpace(c.ButtonText))
+      {
+        <a class="th-btn" href="@link.Url" target="@(link.Target ?? "_self")">@c.ButtonText</a>
+      }
+
+      @if (c.HeroImage != null)
+      {
+        <img class="th-people" src="@c.HeroImage.Url()" alt="" />
+      }
+    </div>
+  </div>
+</section>

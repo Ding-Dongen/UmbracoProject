@@ -1,0 +1,58 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "mainLayout.cshtml";
+
+    var siteSettings = Umbraco.ContentAtRoot()
+        .SelectMany(x => x.DescendantsOrSelf())
+        .FirstOrDefault(x => x.ContentType.Alias == "siteSettings");
+
+
+    var brands = siteSettings?.Value<BlockListModel>("globalBrands");
+}
+<section class="hero-callback">
+
+    <div class="hc-hero">
+      @await Html.GetBlockListHtmlAsync(Model, "sectionMainHero")
+    </div>
+
+    <div class="hc-content">
+      <div class="hc-left">
+        @await Html.GetBlockListHtmlAsync(Model, "sectionAboutInfo")
+      </div>
+      <aside class="hc-right">
+        @await Html.GetBlockListHtmlAsync(Model, "sectionRequestCallback")
+      </aside>
+    </div>
+</section>
+
+<section>
+@await Html.GetBlockListHtmlAsync(Model, "sectionSolutionHero")
+
+</section>
+
+<section>
+@await Html.GetBlockListHtmlAsync(Model, "trustedHero")
+
+</section>
+<section>
+@await Html.GetBlockListHtmlAsync(Model, "successHero")
+	@if (Model.HasProperty("contactHero"))
+{
+    var sectionBlocks = Model.Value<BlockListModel>("contactHero");
+    if (sectionBlocks?.Any() == true)
+    {
+        @await Html.GetBlockListHtmlAsync(sectionBlocks)
+    }
+}
+</section>
+<section>
+    <div>
+    @if (brands?.Any() == true)
+        {
+            @await Html.GetBlockListHtmlAsync(brands)
+        }
+  </div>
+</section>
+

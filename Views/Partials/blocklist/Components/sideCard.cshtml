@@ -1,0 +1,23 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var c = (ContentModels.SideCard)Model.Content;
+}
+
+<section class="about-teaser">
+
+  @if (!string.IsNullOrWhiteSpace(c.Title))
+  {
+    <h3 class="at-title">@c.Title</h3>
+  }
+  @if (c.Image != null)
+  {
+    <img class="at-image" src="@c.Image.Url()" alt="@c.Title" />
+  }
+
+  @if (!string.IsNullOrWhiteSpace(c.Description))
+  {
+    <p class="at-body">@c.Description</p>
+  }
+</section>

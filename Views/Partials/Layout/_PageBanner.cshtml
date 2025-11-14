@@ -1,0 +1,38 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IBanner>
+@using Umbraco.Cms.Core.PublishedCache
+@using Umbraco.Cms.Core.Routing
+@using Umbraco.Cms.Core.Services.Navigation
+
+@inject IPublishedContentCache PublishedContentCache
+@inject IDocumentNavigationQueryService DocumentNavigationQueryService
+@inject IPublishedUrlProvider PublishedUrlProvider
+
+ @* Code from Umbraco and followed instructiions from Emil Vettainen on how to implement the banner on each page, but sligtly modified by me *@
+
+@{ 
+    var selection = Model.Ancestors().ToArray(); 
+}
+
+  <section class="page-banner" style="background-image:url('@Url.Content("~/images/bg-banner-image.svg")');">
+
+
+  <div class="pb-inner">
+    @if (!string.IsNullOrWhiteSpace(Model.Title))
+    {
+      <h1 class="pb-title">@Model.Title</h1>
+    }
+
+    @if (selection?.Length > 0)
+{
+    <ul class="pb-breadcrumb">
+        
+        @foreach (var item in selection.OrderBy(x => x.Level))
+        {
+            <li class="pb-list"><a href="@item.Url(PublishedUrlProvider)">@item.Name</a> <span class="divider"><i class="fa-solid fa-angle-right"></i></span></li>
+        }
+
+        <li class="pb-active">@Model.Name</li>
+    </ul>
+}
+  </div>
+</section>

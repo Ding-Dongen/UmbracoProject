@@ -1,0 +1,47 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using Umbraco.Extensions
+@using Umbraco.Cms.Core.Models
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@* Follow Emil Vettainen on hard typed code
+   c.value has Chatgtp provided and it gets the value of a property
+   And this i implementet in most components *@
+@{
+    var c = (ContentModels.AboutInfo)Model.Content;
+
+    var smallTitle   = c.Value<string>("smallTitle");
+    var heading      = c.Value<string>("heading");
+    var bodyText     = c.Value<string>("bodyText");
+    var signature    = c.Value<IPublishedContent>("signature");
+    var personName   = c.Value<string>("personName");
+}
+
+<section class="about-statement">
+  <div class="as-wrap">
+    @if (!string.IsNullOrWhiteSpace(smallTitle))
+    {
+      <span class="as-eyebrow">@smallTitle</span>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(heading))
+    {
+      <h2 class="as-title">@heading</h2>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(bodyText))
+    {
+      <div class="as-body">@Html.Raw(bodyText)</div>
+    }
+
+    <div class="as-signoff">
+      @if (signature != null)
+      {
+        <img class="as-signature" src="@signature.Url()" alt="" loading="lazy" />
+      
+        <div class="as-person">
+          @if (!string.IsNullOrWhiteSpace(personName))  { <strong>@personName</strong> }
+        </div>
+      }
+    </div>
+  </div>
+</section>

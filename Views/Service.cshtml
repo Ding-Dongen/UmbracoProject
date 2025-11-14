@@ -1,0 +1,41 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "mainLayout.cshtml";
+
+	    var solutionBlocks = Model.HasProperty("solutionHero")
+        ? Model.Value<BlockListModel>("solutionHero")
+        : null;
+
+
+	var siteSettings = Umbraco.ContentAtRoot()
+        .SelectMany(x => x.DescendantsOrSelf()) 
+        .FirstOrDefault(x => x.ContentType.Alias == "siteSettings");
+
+    var contactHeroBlocks = siteSettings?.Value<BlockListModel>("globalContactHero");
+}
+
+<partial name="Partials/Layout/_PageBanner" model="(IBanner)Model" />
+
+
+<section>
+  <div>
+
+@if (solutionBlocks?.Any() == true)
+{
+    @await Html.GetBlockListHtmlAsync(solutionBlocks)
+}
+
+  </div>
+
+  <div>
+	<div>
+    @if (contactHeroBlocks?.Any() == true)
+{
+    @await Html.GetBlockListHtmlAsync(contactHeroBlocks)
+}
+  </div>
+  </div>
+
+</section>

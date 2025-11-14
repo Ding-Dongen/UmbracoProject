@@ -1,0 +1,48 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var c = (ContentModels.SuccessHero)Model.Content;
+    var s = Model.Settings as ContentModels.SuccessHeroSettings;
+
+    var statsBg = s?.BgColor?.Color ?? "#48524f";
+
+    var patternUrl = c.BgPattern != null ? c.BgPattern.Url() : null;
+}
+
+<section class="su-hero">
+  <div class="su-wrap">
+    <div class="su-header">
+      @if (!string.IsNullOrWhiteSpace(c.SmallTitle))
+      {
+        <span class="su-kicker">@c.SmallTitle</span>
+      }
+      @if (!string.IsNullOrWhiteSpace(c.Heading))
+      {
+        <h2 class="su-title">@c.Heading</h2>
+      }
+    </div>
+
+    <div class="su-band">
+      <div class="su-band-inner">
+        <div class="su-stat">
+          <div class="su-num">@c.Stat1Number</div>
+          <div class="su-label">@c.Stat1Label</div>
+        </div>
+        <div class="su-stat">
+          <div class="su-num">@c.Stat2Number</div>
+          <div class="su-label">@c.Stat2Label</div>
+        </div>
+        <div class="su-stat">
+          <div class="su-num">@c.Stat3Number</div>
+          <div class="su-label">@c.Stat3Label</div>
+        </div>
+      </div>
+
+      @if (c.BottomImage != null)
+      {
+        <img class="su-bottom-img" src="@c.BottomImage.Url()" alt="" />
+      }
+    </div>
+  </div>
+</section>

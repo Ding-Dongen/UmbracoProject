@@ -1,0 +1,55 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using Umbraco.Extensions
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+ @* Read about source in aboutInfo *@
+
+@{
+    var c = (ContentModels.RequestCallback)Model.Content;
+
+    var heading    = c.Value<string>("heading");
+    var introText  = c.Value<string>("bodyText");
+    var namePh     = c.Value<string>("namePlaceholder")  ?? "Name";
+    var emailPh    = c.Value<string>("emailPlaceholder") ?? "Email address";
+    var phonePh    = c.Value<string>("phonePlaceholder") ?? "Phone";
+    var submitText = c.Value<string>("submitText") ?? "Submit";
+}
+
+<section class="rc rc--abs">
+  <div class="rc-inner">
+    @if (!string.IsNullOrWhiteSpace(heading))
+    {
+      <h3 class="rc-title">@heading</h3>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(introText))
+    {
+      <div class="rc-intro">@Html.Raw(introText)</div>
+    }
+
+    <form method="post" action="#" class="rc-form" novalidate>
+      <label class="rc-field">
+        <input type="text" name="name" placeholder="@namePh" required />
+      </label>
+
+      <label class="rc-field">
+        <input type="email" name="email" placeholder="@emailPh" required />
+      </label>
+
+      <label class="rc-field">
+        <input type="tel" name="phone" placeholder="@phonePh" />
+      </label>
+
+      <label class="rc-field">
+        <select class="rc-select" name="service">
+          <option>Financial consulting</option>
+          <option>Tax & Audits</option>
+          <option>Risk Management</option>
+          <option>Investments</option>
+        </select>
+      </label>
+
+      <button type="submit" class="rc-submit">@submitText</button>
+    </form>
+  </div>
+</section>

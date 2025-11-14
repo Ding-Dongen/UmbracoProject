@@ -1,0 +1,57 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var content = (ContentModels.ContactHero)Model.Content;
+    var settings = Model.Settings as ContentModels.ContactHeroSettings;
+
+    var pickedColor = settings?.BackgroundColor?.Color ?? "#ffffff";
+
+}
+
+<section class="contact-hero" style="background-color:@pickedColor">
+  <div class="ch-container">
+
+    <div class="ch-left">
+      @if (content.ContactImage != null)
+      {
+          <img class="ch-person" src="@content.ContactImage.Url()" alt="" />
+      }
+    </div>
+
+    <div class="ch-right">
+      <h2>@content.Heading</h2>
+
+      <ul class="ch-list">
+        <li>
+          <span class="ch-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+          <div>
+            <strong>@content.OfficeLocation</strong>
+            <div>@content.OfficeAddress</div>
+          </div>
+        </li>
+
+        <li>
+          <span class="ch-icon"><i class="fa-solid fa-phone"></i></span>
+          <div>
+            <strong>@content.PhoneLabel</strong>
+            <div>
+              <a href="tel:@content.PhoneNumber">@content.PhoneNumber</a>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <span class="ch-icon" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span>
+          <div>
+            <strong>@content.EmailLabel</strong>
+            <div>
+              <a href="mailto:@content.Email">@content.Email</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>

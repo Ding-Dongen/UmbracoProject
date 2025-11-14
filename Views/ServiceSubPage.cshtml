@@ -1,0 +1,52 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Strings
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ServiceSubPage>
+
+ @* Followed Email Vettainens video on sub pages and the structure of it.
+    It is modified by me since he was using Tailwind *@
+
+@{
+    Layout = "mainLayout.cshtml";
+
+    var sideBlocks = Model.Value<BlockListModel>("sideWidgets");
+    var bodyHtml = Model.Value<string>("subPageBody");
+		var siteSettings = Umbraco.ContentAtRoot()
+        .FirstOrDefault(x => x.ContentType.Alias == "siteSettings");
+
+    var contactHeroBlocks = siteSettings?.Value<BlockListModel>("globalContactHero");
+}
+
+<partial name="Partials/Layout/_PageBanner" model="(IBanner)Model" />
+
+<section class="sp">
+  <div class="sp-inner">
+    <aside class="sp-aside">
+      @if (sideBlocks?.Any() == true)
+      {
+          @await Html.GetBlockListHtmlAsync(sideBlocks)
+      }
+    </aside>
+
+	 <div class="sp-divider"></div>
+    <article class="sp-main">
+      <div class="sp-body">
+        @if (!string.IsNullOrWhiteSpace(bodyHtml))
+        {
+            @Html.Raw(bodyHtml)
+        }
+      </div>
+    </article>
+
+  </div>
+  <div>
+	@await Html.GetBlockListHtmlAsync(Model, "questionsForm")
+  </div>
+  <div>
+    @if (contactHeroBlocks?.Any() == true)
+{
+    @await Html.GetBlockListHtmlAsync(contactHeroBlocks)
+}
+  </div>
+</section>

@@ -1,0 +1,29 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var c = (ContentModels.SideSupport)Model.Content;
+    var bg = c.BgPattern;
+    var style = bg != null ? $"background-image:url('{bg.Url()}');" : null;
+}
+
+<section class="helpbox">
+  <div class="helpbox-inner" style="@style">
+    @if (!string.IsNullOrWhiteSpace(c.Title))
+    {
+      <h3>@c.Title</h3>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(c.Paragraph))
+    {
+      <p>@c.Paragraph</p>
+    }
+
+    <form method="post" action="#">
+      <input type="email" placeholder="@(string.IsNullOrWhiteSpace(c.Inputemail) ? "E-mail address" : c.Inputemail)" />
+      <button type="submit" aria-label="Submit email">
+        <i class="fa-regular fa-envelope"></i>
+      </button>
+    </form>
+  </div>
+</section>

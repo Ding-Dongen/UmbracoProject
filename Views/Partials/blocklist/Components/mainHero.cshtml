@@ -1,0 +1,54 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using System.Linq
+@using Umbraco.Extensions
+@using Umbraco.Cms.Core.Models
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+ @* Read about source in aboutInfo *@
+ 
+@{
+    var c = (ContentModels.MainHero)Model.Content;
+
+    var smallTitle = c.Value<string>("smallTitle");
+    var heading    = c.Value<string>("heading");
+    var bodyText   = c.Value<string>("bodyText");
+    var sideImage  = c.Value<IPublishedContent>("sideImage");
+
+    var linkSingle  = c.Value<Link>("linkContact");
+    var linkMulti   = c.Value<IEnumerable<Link>>("linkContact");
+    var link        = linkSingle ?? linkMulti?.FirstOrDefault();
+    var linkText     = !string.IsNullOrWhiteSpace(c.Value<string>("linkText"))
+                        ? c.Value<string>("linkText")
+                        : link?.Name;
+    var linkUrl      = link?.Url;
+    var linkTarget   = link?.Target; 
+}
+
+<section class="main-hero" 
+         style="@(sideImage != null ? $"background-image:url('{sideImage.Url()}');" : null)">
+  <div class="mh-overlay"></div>
+
+  <div class="mh-grid">
+    <div class="mh-left">
+      @if (!string.IsNullOrWhiteSpace(smallTitle))
+      {
+        <span class="mh-eyebrow">@smallTitle</span>
+      }
+
+      @if (!string.IsNullOrWhiteSpace(heading))
+      {
+        <h1 class="mh-title">@heading</h1>
+      }
+
+      @if (!string.IsNullOrWhiteSpace(bodyText))
+      {
+        <div class="mh-body">@Html.Raw(bodyText)</div>
+      }
+
+      @if (!string.IsNullOrWhiteSpace(linkUrl) && !string.IsNullOrWhiteSpace(linkText))
+      {
+        <a href="@linkUrl" target="@linkTarget" class="mh-cta" aria-label="@linkText">@linkText</a>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,35 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using Umbraco.Extensions
+@using Umbraco.Cms.Core.Models
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var c = (ContentModels.Testamonial)Model.Content;
+
+    var photo = c.Value<IPublishedContent>("image");
+    var quote = c.Value<string>("quote");
+    var bodyText = c.Value<string>("bodyText");
+}
+
+<section class="testimonial-wide">
+  <div class="tw-container">
+    @if (photo != null)
+    {
+      <div class="tw-image">
+        <img src="@photo.Url()" alt="" loading="lazy" />
+        @if (!string.IsNullOrWhiteSpace(quote))
+      {
+        <div class="tw-quote">@quote</div>
+      }
+      </div>
+    }
+
+    <div class="tw-content">
+
+      @if (!string.IsNullOrWhiteSpace(bodyText))
+      {
+        <div class="tw-body">@Html.Raw(bodyText)</div>
+      }
+    </div>
+  </div>
+</section>
